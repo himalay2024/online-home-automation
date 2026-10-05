@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sensor Monitoring</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .back {
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 45px auto;
+        }
+
+        .intro {
+            margin-bottom: 25px;
+        }
+
+        .intro h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .intro p {
+            color: #64748b;
+        }
+
+        .sensor-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .sensor-icon {
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dbeafe;
+            border-radius: 16px;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .save-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background: #1d4ed8;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .container {
+                margin-top: 30px;
+            }
+
+            .sensor-card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+
+        <h1>🏠 Home Automation</h1>
+
+        <a class="back"
+           href="devices">
+            ← Dashboard
+        </a>
+
+    </header>
+
+    <main class="container">
+
+        <div class="intro">
+
+            <h2>🌡️ Sensor Monitoring</h2>
+
+            <p>
+                Record temperature and humidity readings
+                for your home devices.
+            </p>
+
+        </div>
+
+        <div class="sensor-card">
+
+            <div class="sensor-icon">
+                🌡️
+            </div>
+
+            <form action="sensor/save"
+                  method="post">
+
+                <div class="form-group">
+
+                    <label for="deviceId">
+                        Device ID
+                    </label>
+
+                    <input type="number"
+                           id="deviceId"
+                           name="deviceId"
+                           value="1"
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="temperature">
+                        Temperature (°C)
+                    </label>
+
+                    <input type="number"
+                           step="0.01"
+                           id="temperature"
+                           name="temperature"
+                           placeholder="e.g. 25.5"
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="humidity">
+                        Humidity (%)
+                    </label>
+
+                    <input type="number"
+                           step="0.01"
+                           id="humidity"
+                           name="humidity"
+                           placeholder="e.g. 60"
+                           required>
+
+                </div>
+
+                <button class="save-button"
+                        type="submit">
+                    Save Sensor Reading
+                </button>
+
+            </form>
+
+            <div class="info">
+                Sensor readings are stored in the database
+                with the current timestamp.
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

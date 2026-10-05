@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Device Management</title>
+</head>
+
+<body>
+
+    <h1>Home Automation - Add Device</h1>
+
+    <form action="device/save" method="post">
+
+        <label for="name">Device Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <br><br>
+
+        <label for="type">Device Type:</label>
+
+        <select id="type" name="type" required>
+            <option value="">Select Device</option>
+            <option value="Light">Light</option>
+            <option value="Fan">Fan</option>
+            <option value="Air Conditioner">Air Conditioner</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Save Device</button>
+
+    </form>
+
+</body>
+</html>
