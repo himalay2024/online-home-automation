@@ -1,37 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Device Management</title>
+    <title>Add Device - Home Automation</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #1e3a8a,
+                #2563eb
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .header .icon {
+            font-size: 55px;
+            margin-bottom: 5px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            color: #dbeafe;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .description {
+            color: #64748b;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            font-size: 15px;
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        select {
+            background: white;
+            cursor: pointer;
+        }
+
+        .save-button {
+            width: 100%;
+
+            border: none;
+            border-radius: 9px;
+
+            padding: 14px;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #1d4ed8
+            );
+
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .save-button:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .back-button {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            padding: 12px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            color: #2563eb;
+
+            border: 1px solid #bfdbfe;
+
+            background: #eff6ff;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .back-button:hover {
+            background: #dbeafe;
+        }
+
+        .hint {
+            margin-top: 20px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            background: #f8fafc;
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 25px 20px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .header .icon {
+                font-size: 45px;
+            }
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-    <h1>Home Automation - Add Device</h1>
+    <div class="page">
 
-    <form action="device/save" method="post">
+        <div class="header">
 
-        <label for="name">Device Name:</label>
-        <input type="text" id="name" name="name" required>
+            <div class="icon">🏠</div>
 
-        <br><br>
+            <h1>Home Automation</h1>
 
-        <label for="type">Device Type:</label>
+            <p>Add a new smart device to your home</p>
 
-        <select id="type" name="type" required>
-            <option value="">Select Device</option>
-            <option value="Light">Light</option>
-            <option value="Fan">Fan</option>
-            <option value="Air Conditioner">Air Conditioner</option>
-        </select>
+        </div>
 
-        <br><br>
 
-        <button type="submit">Save Device</button>
+        <div class="card">
 
-    </form>
+            <h2>➕ Add New Device</h2>
+
+            <p class="description">
+                Enter the device details below to add it to your home automation system.
+            </p>
+
+
+            <form action="device/save" method="post">
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Device Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="e.g. Living Room Light"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="type">
+                        Device Type
+                    </label>
+
+                    <select
+                        id="type"
+                        name="type"
+                        required
+                    >
+
+                        <option value="">
+                            Select Device Type
+                        </option>
+
+                        <option value="Light">
+                            💡 Light
+                        </option>
+
+                        <option value="Fan">
+                            🌀 Fan
+                        </option>
+
+                        <option value="Air Conditioner">
+                            ❄️ Air Conditioner
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-button"
+                >
+                    💾 Save Device
+                </button>
+
+            </form>
+
+
+            <a
+                href="devices"
+                class="back-button"
+            >
+                ← Back to Dashboard
+            </a>
+
+
+            <div class="hint">
+                Your device will appear on the dashboard after saving.
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
+
 </html>

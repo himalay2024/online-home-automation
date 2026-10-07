@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Home Automation | Login</title>
+    <title>Create Account | Home Automation</title>
 
     <style>
 
@@ -37,13 +37,13 @@
             padding: 20px;
         }
 
-        .login-container {
+        .container {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
 
             background: white;
 
-            padding: 40px;
+            padding: 38px;
 
             border-radius: 20px;
 
@@ -52,25 +52,22 @@
         }
 
         .logo {
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
 
-            margin: 0 auto 20px;
+            margin: 0 auto 18px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            border-radius: 18px;
+            border-radius: 17px;
 
-            background: #2563eb;
+            background: #16a34a;
 
             color: white;
 
-            font-size: 32px;
-
-            box-shadow:
-                0 8px 20px rgba(37, 99, 235, 0.3);
+            font-size: 30px;
         }
 
         h1 {
@@ -78,7 +75,7 @@
 
             color: #0f172a;
 
-            font-size: 26px;
+            font-size: 27px;
 
             margin-bottom: 8px;
         }
@@ -88,7 +85,7 @@
 
             color: #64748b;
 
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
         .form-group {
@@ -122,13 +119,13 @@
         }
 
         input:focus {
-            border-color: #2563eb;
+            border-color: #16a34a;
 
             box-shadow:
-                0 0 0 3px rgba(37, 99, 235, 0.12);
+                0 0 0 3px rgba(22, 163, 74, 0.12);
         }
 
-        .login-button {
+        .register-button {
             width: 100%;
 
             padding: 14px;
@@ -140,8 +137,8 @@
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #1d4ed8
+                    #16a34a,
+                    #15803d
                 );
 
             color: white;
@@ -155,35 +152,21 @@
             transition: 0.2s;
         }
 
-        .login-button:hover {
+        .register-button:hover {
             transform: translateY(-1px);
 
             box-shadow:
-                0 8px 20px rgba(37, 99, 235, 0.3);
+                0 8px 20px rgba(22, 163, 74, 0.3);
         }
 
-        .register-section {
-            margin-top: 25px;
-
-            padding-top: 22px;
-
-            border-top: 1px solid #e2e8f0;
+        .back-section {
+            margin-top: 22px;
 
             text-align: center;
         }
 
-        .register-text {
-            color: #64748b;
-
-            font-size: 14px;
-
-            margin-bottom: 10px;
-        }
-
-        .register-button {
+        .back-button {
             display: block;
-
-            width: 100%;
 
             padding: 12px;
 
@@ -191,25 +174,25 @@
 
             text-decoration: none;
 
-            background: #eff6ff;
+            background: #f1f5f9;
 
-            color: #2563eb;
+            color: #475569;
 
-            border: 1px solid #bfdbfe;
+            border: 1px solid #e2e8f0;
 
             font-weight: bold;
 
             transition: 0.2s;
         }
 
-        .register-button:hover {
-            background: #dbeafe;
+        .back-button:hover {
+            background: #e2e8f0;
         }
 
         .footer {
             text-align: center;
 
-            margin-top: 25px;
+            margin-top: 22px;
 
             color: #94a3b8;
 
@@ -218,12 +201,12 @@
 
         @media (max-width: 480px) {
 
-            .login-container {
+            .container {
                 padding: 30px 22px;
             }
 
             h1 {
-                font-size: 23px;
+                font-size: 24px;
             }
 
         }
@@ -235,26 +218,24 @@
 
 <body>
 
-    <div class="login-container">
+    <div class="container">
 
         <div class="logo">
-            🏠
+            👤
         </div>
 
 
         <h1>
-            Online Home Automation
+            Create New Account
         </h1>
 
 
         <p class="subtitle">
-            Smart Home Monitoring System
+            Join your Home Automation System
         </p>
 
 
-        <!-- Login Form -->
-
-        <form action="login" method="post">
+        <form action="register" method="post">
 
             <div class="form-group">
 
@@ -266,7 +247,7 @@
                     type="text"
                     id="username"
                     name="username"
-                    placeholder="Enter your username"
+                    placeholder="Choose a username"
                     required
                 >
 
@@ -283,7 +264,7 @@
                     type="password"
                     id="password"
                     name="password"
-                    placeholder="Enter your password"
+                    placeholder="Create a password"
                     required
                 >
 
@@ -292,27 +273,21 @@
 
             <button
                 type="submit"
-                class="login-button"
+                class="register-button"
             >
-                🔐 Login
+                ✨ Create Account
             </button>
 
         </form>
 
 
-        <!-- Registration -->
-
-        <div class="register-section">
-
-            <div class="register-text">
-                Don't have an account?
-            </div>
+        <div class="back-section">
 
             <a
-                href="register.html"
-                class="register-button"
+                href="login.html"
+                class="back-button"
             >
-                ✨ Create New Account
+                ← Back to Login
             </a>
 
         </div>

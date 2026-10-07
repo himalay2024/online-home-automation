@@ -9,6 +9,10 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
+    // =========================
+    // LOGIN
+    // =========================
+
     public int login(String username, String password) {
 
         String sql = "SELECT id FROM users " +
@@ -28,10 +32,48 @@ public class UserDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("LOGIN ERROR: " + e.getMessage());
+
+            System.out.println(
+                    "LOGIN ERROR: " + e.getMessage()
+            );
+
             e.printStackTrace();
         }
 
         return -1;
+    }
+
+
+    // =========================
+    // REGISTER NEW USER
+    // =========================
+
+    public boolean register(String username, String password) {
+
+        String sql =
+                "INSERT INTO users (username, password) " +
+                "VALUES (?, ?)";
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            int rowsInserted = statement.executeUpdate();
+
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "REGISTER ERROR: " + e.getMessage()
+            );
+
+            e.printStackTrace();
+
+            return false;
+        }
     }
 }
