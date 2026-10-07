@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -23,7 +24,7 @@ public class DeviceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response)
+            HttpServletResponse response)
             throws ServletException, IOException {
 
         String name = request.getParameter("name");
@@ -35,8 +36,15 @@ public class DeviceServlet extends HttpServlet {
         device.setType(type);
         device.setStatus(false);
 
-        // Demo user ID = 1
-        int userId = 1;
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("userId") == null) {
+            response.sendRedirect(
+                    request.getContextPath() + "/login.html");
+            return;
+        }
+
+        int userId = (Integer) session.getAttribute("userId");
 
         boolean saved = deviceDAO.saveDevice(device, userId);
 
@@ -45,12 +53,10 @@ public class DeviceServlet extends HttpServlet {
 
         if (saved) {
             response.getWriter().println(
-                    "<h2>Device saved successfully!</h2>"
-            );
+                    "<h2>Device saved successfully!</h2>");
         } else {
             response.getWriter().println(
-                    "<h2>Failed to save device.</h2>"
-            );
+                    "<h2>Failed to save device.</h2>");
         }
     }
 }
