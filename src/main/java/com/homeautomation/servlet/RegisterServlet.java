@@ -11,22 +11,42 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Handles new user registration requests.
+ *
+ * This servlet receives registration details from the registration
+ * form, validates the input and uses UserDAO to store the new user
+ * in the database.
+ */
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
+    // DAO used to perform user registration in the database
     private UserDAO userDAO;
 
+    /**
+     * Initializes the servlet and creates the UserDAO object.
+     */
     @Override
     public void init() {
         userDAO = new UserDAO();
     }
 
+    /**
+     * Handles POST requests submitted from the registration form.
+     *
+     * @param request contains the username and password
+     * @param response is used to display the registration result
+     * @throws ServletException if a servlet-related error occurs
+     * @throws IOException if an input/output error occurs
+     */
     @Override
     protected void doPost(
             HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Read registration details submitted by the user
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -34,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        // Empty field check
+        // Validate that username and password are not empty
         if (username == null || username.trim().isEmpty()
                 || password == null || password.trim().isEmpty()) {
 
@@ -47,13 +67,16 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+        // Remove unnecessary spaces from the username
         username = username.trim();
 
+        // Save the new user using the DAO
         boolean registered =
                 userDAO.register(username, password);
 
         if (registered) {
 
+            // Display a successful registration page
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -127,6 +150,7 @@ public class RegisterServlet extends HttpServlet {
 
         } else {
 
+            // Display an error when registration fails
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");

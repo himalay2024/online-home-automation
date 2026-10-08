@@ -12,38 +12,62 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * Displays the activity history of the user's home automation devices.
+ *
+ * This servlet retrieves device history from the database using DeviceDAO
+ * and generates an HTML page containing device names, actions and
+ * activity timestamps.
+ */
 @WebServlet("/history")
 public class HistoryServlet extends HttpServlet {
 
+    // DAO used to retrieve device history from the database
     private DeviceDAO deviceDAO;
 
+    /**
+     * Initializes the servlet and creates the DeviceDAO object.
+     */
     @Override
     public void init() {
         deviceDAO = new DeviceDAO();
     }
 
+    /**
+     * Handles GET requests for viewing device history.
+     *
+     * @param request contains the current user's session information
+     * @param response is used to generate the history page
+     * @throws ServletException if a servlet-related error occurs
+     * @throws IOException if an input/output error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Retrieve the logged-in user's ID from the session
         Integer userId =
                 (Integer) request.getSession().getAttribute("userId");
 
+        // Redirect users to login if they are not authenticated
         if (userId == null) {
             response.sendRedirect(
                     request.getContextPath() + "/login.html");
             return;
         }
 
+        // Fetch device history belonging to the logged-in user
         List<String[]> history =
                 deviceDAO.getDeviceHistory(userId);
 
+        // Configure the HTML response
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
 
+        // Start generating the history page
         out.println("<!DOCTYPE html>");
         out.println("<html lang='en'>");
 
@@ -54,6 +78,7 @@ public class HistoryServlet extends HttpServlet {
 
         out.println("<title>Device History</title>");
 
+        // CSS styles for the history page
         out.println("<style>");
 
         out.println("* {");
@@ -150,6 +175,7 @@ public class HistoryServlet extends HttpServlet {
         out.println("color: #64748b;");
         out.println("}");
 
+        // Responsive styling for smaller screens
         out.println("@media (max-width: 600px) {");
 
         out.println(".header {");
@@ -173,6 +199,7 @@ public class HistoryServlet extends HttpServlet {
 
         out.println("<body>");
 
+        // Page header and dashboard navigation
         out.println("<header class='header'>");
 
         out.println("<h1>🏠 Home Automation</h1>");
@@ -185,6 +212,7 @@ public class HistoryServlet extends HttpServlet {
 
         out.println("<main class='container'>");
 
+        // Page introduction
         out.println("<div class='intro'>");
         out.println("<h2>📋 Device History</h2>");
         out.println("<p>View recent ON and OFF activity of your devices.</p>");
@@ -192,6 +220,7 @@ public class HistoryServlet extends HttpServlet {
 
         out.println("<div class='history-card'>");
 
+        // Display a message when there is no device activity
         if (history.isEmpty()) {
 
             out.println("<div class='empty'>");
@@ -201,6 +230,7 @@ public class HistoryServlet extends HttpServlet {
 
         } else {
 
+            // Create a table for displaying device history
             out.println("<table>");
 
             out.println("<tr>");
@@ -209,8 +239,10 @@ public class HistoryServlet extends HttpServlet {
             out.println("<th>Date & Time</th>");
             out.println("</tr>");
 
+            // Loop through all history records
             for (String[] record : history) {
 
+                // Apply different CSS classes for ON and OFF actions
                 String actionClass =
                         "ON".equalsIgnoreCase(record[1])
                                 ? "on"
@@ -218,16 +250,19 @@ public class HistoryServlet extends HttpServlet {
 
                 out.println("<tr>");
 
+                // Display the device name
                 out.println("<td>" +
                         record[0] +
                         "</td>");
 
+                // Display the device action
                 out.println("<td class='" +
                         actionClass +
                         "'>" +
                         record[1] +
                         "</td>");
 
+                // Display the date and time of the action
                 out.println("<td>" +
                         record[2] +
                         "</td>");

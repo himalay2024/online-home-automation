@@ -14,25 +14,44 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * Displays all devices belonging to the currently logged-in user.
+ *
+ * This servlet retrieves device data using DeviceDAO and dynamically
+ * generates the device dashboard as an HTML response.
+ */
 @WebServlet("/devices")
 public class DeviceListServlet extends HttpServlet {
 
+    // DAO used to retrieve device information from the database
     private DeviceDAO deviceDAO;
 
+    /**
+     * Initializes the servlet and creates the DeviceDAO object.
+     */
     @Override
     public void init() {
         deviceDAO = new DeviceDAO();
     }
 
+    /**
+     * Handles GET requests for the device dashboard.
+     *
+     * @param request contains the current user session
+     * @param response is used to generate the device dashboard
+     * @throws ServletException if a servlet-related error occurs
+     * @throws IOException if an input/output error occurs
+     */
     @Override
     protected void doGet(
             HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Get the existing session without creating a new session
         HttpSession session = request.getSession(false);
 
-        // User login check
+        // Only logged-in users can access the device dashboard
         if (session == null || session.getAttribute("userId") == null) {
             response.sendRedirect(
                     request.getContextPath() + "/login.html"
@@ -40,15 +59,19 @@ public class DeviceListServlet extends HttpServlet {
             return;
         }
 
+        // Retrieve logged-in user's information from the session
         int userId = (Integer) session.getAttribute("userId");
-
         String username = (String) session.getAttribute("username");
 
         List<Device> devices;
 
         try {
+            // Fetch all devices belonging to the logged-in user
             devices = deviceDAO.getAllDevices(userId);
+
         } catch (Exception e) {
+
+            // Display an error if device retrieval fails
             response.setContentType("text/html;charset=UTF-8");
 
             PrintWriter out = response.getWriter();
@@ -63,10 +86,7 @@ public class DeviceListServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        // =========================
-        // HTML START
-        // =========================
-
+        // Start generating the HTML dashboard
         out.println("<!DOCTYPE html>");
         out.println("<html>");
         out.println("<head>");
@@ -81,7 +101,7 @@ public class DeviceListServlet extends HttpServlet {
         out.println("<title>My Home Devices</title>");
 
         // =========================
-        // CSS
+        // CSS STYLING
         // =========================
 
         out.println("<style>");
@@ -129,7 +149,7 @@ public class DeviceListServlet extends HttpServlet {
         out.println("font-weight: bold;");
         out.println("}");
 
-        // Main
+        // Main container
         out.println(".container {");
         out.println("max-width: 1100px;");
         out.println("margin: 35px auto;");
@@ -148,7 +168,7 @@ public class DeviceListServlet extends HttpServlet {
         out.println("margin-top: 0;");
         out.println("}");
 
-        // Buttons
+        // Dashboard action buttons
         out.println(".action-buttons {");
         out.println("display: flex;");
         out.println("gap: 12px;");
@@ -264,7 +284,7 @@ public class DeviceListServlet extends HttpServlet {
         out.println("color: #64748b;");
         out.println("}");
 
-        // Responsive
+        // Responsive layout for smaller screens
         out.println("@media (max-width: 600px) {");
 
         out.println(".header {");
@@ -296,16 +316,15 @@ public class DeviceListServlet extends HttpServlet {
         out.println("}");
 
         out.println("</style>");
-
         out.println("</head>");
 
         // =========================
-        // BODY
+        // PAGE BODY
         // =========================
 
         out.println("<body>");
 
-        // Header
+        // Header containing application name and user information
         out.println("<div class='header'>");
 
         out.println("<h1>🏠 Home Automation</h1>");
@@ -325,13 +344,12 @@ public class DeviceListServlet extends HttpServlet {
         );
 
         out.println("</div>");
-
         out.println("</div>");
 
-        // Main container
+        // Main dashboard container
         out.println("<div class='container'>");
 
-        // Welcome box
+        // Welcome section
         out.println("<div class='welcome'>");
 
         out.println("<h2>My Home Devices</h2>");
@@ -348,7 +366,7 @@ public class DeviceListServlet extends HttpServlet {
 
         out.println("<div class='action-buttons'>");
 
-        // Add Device
+        // Link to add a new device
         out.println(
                 "<a class='action-button add-button' href='" +
                 request.getContextPath() +
@@ -356,7 +374,7 @@ public class DeviceListServlet extends HttpServlet {
                 "➕ Add Device</a>"
         );
 
-        // Sensor Monitoring
+        // Link to sensor monitoring
         out.println(
                 "<a class='action-button sensor-button' href='" +
                 request.getContextPath() +
@@ -364,7 +382,7 @@ public class DeviceListServlet extends HttpServlet {
                 "🌡 Sensor Monitoring</a>"
         );
 
-        // Device History
+        // Link to device history
         out.println(
                 "<a class='action-button history-button' href='" +
                 request.getContextPath() +
@@ -375,9 +393,10 @@ public class DeviceListServlet extends HttpServlet {
         out.println("</div>");
 
         // =========================
-        // DEVICES
+        // DEVICE DISPLAY
         // =========================
 
+        // Show an empty-state message when no devices exist
         if (devices == null || devices.isEmpty()) {
 
             out.println("<div class='empty'>");
@@ -399,16 +418,20 @@ public class DeviceListServlet extends HttpServlet {
 
         } else {
 
+            // Create a responsive grid for all available devices
             out.println("<div class='device-grid'>");
 
+            // Iterate through the device collection
             for (Device device : devices) {
 
+                // Select an icon according to the device type
                 String icon = "💡";
 
                 if (device.getType() != null) {
 
                     if (device.getType().equalsIgnoreCase("Fan")) {
                         icon = "🌀";
+
                     } else if (
                             device.getType().equalsIgnoreCase(
                                     "Air Conditioner"
@@ -438,6 +461,7 @@ public class DeviceListServlet extends HttpServlet {
                         "</div>"
                 );
 
+                // Display the current device status
                 if (device.isStatus()) {
 
                     out.println(
@@ -455,10 +479,13 @@ public class DeviceListServlet extends HttpServlet {
                     );
                 }
 
-                // Control buttons
+                // =========================
+                // DEVICE CONTROL
+                // =========================
+
                 out.println("<div class='control-buttons'>");
 
-                // ON
+                // Form for switching the device ON
                 out.println(
                         "<form action='" +
                         request.getContextPath() +
@@ -482,7 +509,7 @@ public class DeviceListServlet extends HttpServlet {
 
                 out.println("</form>");
 
-                // OFF
+                // Form for switching the device OFF
                 out.println(
                         "<form action='" +
                         request.getContextPath() +
@@ -507,7 +534,6 @@ public class DeviceListServlet extends HttpServlet {
                 out.println("</form>");
 
                 out.println("</div>");
-
                 out.println("</div>");
             }
 
@@ -526,7 +552,6 @@ public class DeviceListServlet extends HttpServlet {
         out.println("</div>");
 
         out.println("</body>");
-
         out.println("</html>");
     }
 }

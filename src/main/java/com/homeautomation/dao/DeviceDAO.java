@@ -6,17 +6,31 @@ import com.homeautomation.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object (DAO) for performing database operations
+ * related to home automation devices.
+ *
+ * This class uses JDBC to save, retrieve and update device data,
+ * device history and sensor readings in the MySQL database.
+ */
 public class DeviceDAO {
 
+    /**
+     * Saves a new device for a specific user.
+     *
+     * @param device the device to be stored
+     * @param userId the ID of the user who owns the device
+     * @return true if the device is saved successfully, otherwise false
+     */
     public boolean saveDevice(Device device, int userId) {
 
         String sql = "INSERT INTO devices (user_id, name, type, status) VALUES (?, ?, ?, ?)";
 
+        // Try-with-resources automatically closes JDBC resources
         try (Connection connection = DBConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -36,12 +50,19 @@ public class DeviceDAO {
         }
     }
 
+    /**
+     * Retrieves all devices belonging to a particular user.
+     *
+     * @param userId the ID of the user
+     * @return list of devices owned by the user
+     */
     public List<Device> getAllDevices(int userId) {
 
         List<Device> devices = new ArrayList<>();
 
         String sql = "SELECT id, name, type, status FROM devices WHERE user_id = ?";
 
+        // Fetch devices using a parameterized SQL query
         try (Connection connection = DBConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -49,6 +70,7 @@ public class DeviceDAO {
 
             ResultSet resultSet = statement.executeQuery();
 
+            // Convert each database row into a Device object
             while (resultSet.next()) {
 
                 Device device = new Device();
@@ -69,6 +91,13 @@ public class DeviceDAO {
         return devices;
     }
 
+    /**
+     * Updates the ON/OFF status of a device.
+     *
+     * @param deviceId the ID of the device
+     * @param status the new status of the device
+     * @return true if the status is updated successfully, otherwise false
+     */
     public boolean updateDeviceStatus(int deviceId, boolean status) {
 
         String sql = "UPDATE devices SET status = ? WHERE id = ?";
@@ -90,6 +119,13 @@ public class DeviceDAO {
         }
     }
 
+    /**
+     * Stores a device ON/OFF action in the device history table.
+     *
+     * @param deviceId the ID of the device
+     * @param action the action performed on the device
+     * @return true if the history is saved successfully, otherwise false
+     */
     public boolean saveDeviceHistory(int deviceId, String action) {
 
         String sql = "INSERT INTO device_history (device_id, action) VALUES (?, ?)";
@@ -111,6 +147,14 @@ public class DeviceDAO {
         }
     }
 
+    /**
+     * Stores temperature and humidity readings for a device.
+     *
+     * @param deviceId the ID of the device
+     * @param temperature recorded temperature value
+     * @param humidity recorded humidity value
+     * @return true if the sensor reading is saved successfully, otherwise false
+     */
     public boolean saveSensorReading(int deviceId,
             double temperature,
             double humidity) {
@@ -137,6 +181,15 @@ public class DeviceDAO {
         }
     }
 
+    /**
+     * Retrieves device activity history for a specific user.
+     *
+     * The query joins the devices and device_history tables
+     * so that the device name can be displayed with each action.
+     *
+     * @param userId the ID of the user
+     * @return list containing device name, action and action time
+     */
     public List<String[]> getDeviceHistory(int userId) {
 
         List<String[]> history = new ArrayList<>();
@@ -154,6 +207,7 @@ public class DeviceDAO {
 
             ResultSet resultSet = statement.executeQuery();
 
+            // Store each history record as a String array
             while (resultSet.next()) {
 
                 String deviceName = resultSet.getString("name");
