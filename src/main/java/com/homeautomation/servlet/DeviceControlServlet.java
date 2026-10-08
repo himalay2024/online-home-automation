@@ -46,7 +46,7 @@ public class DeviceControlServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Read the device ID and requested action from the form
-        String idParameter = request.getParameter("Deviceid");
+        String idParameter = request.getParameter("deviceId");
         String action = request.getParameter("action");
 
         // Convert the device ID from String to integer
