@@ -22,6 +22,10 @@ A user can create an account, log in, add devices and turn them ON or OFF. The a
 - User login and logout
 - Add new home devices
 - View devices belonging to the logged-in user
+- Dashboard statistics showing total devices, devices ON and devices OFF
+- Delhi live weather display showing current temperature and relative humidity
+- Automatic weather refresh every 5 minutes using the Open-Meteo API
+- Color-coded device status badges (green for ON and red for OFF)
 - Turn devices ON and OFF
 - Store device ON/OFF history
 - Store temperature and humidity readings
@@ -39,6 +43,7 @@ A user can create an account, log in, add devices and turn them ON or OFF. The a
 - HTML
 - CSS
 - JavaScript
+- Open-Meteo Weather API
 - Apache Tomcat 10
 - Maven
 - Git and GitHub
@@ -328,6 +333,17 @@ The screenshots include:
 - Device history
 - Sensor monitoring
 - Database device records
+### Updated Dashboard
+
+The dashboard displays device statistics, Delhi weather information and color-coded device statuses.
+
+![Updated Home Automation Dashboard](screenshots/dashboard.png)
+
+### Device Control
+
+The device control page allows users to check device status and switch devices ON or OFF.
+
+![Updated Device Control](screenshots/device-control.png)
 
 ## Diagrams
 
@@ -358,6 +374,9 @@ The following parts have been implemented and tested:
 - DAO classes
 - Core Java OOP concepts
 - Responsive web interface
+- Dashboard device statistics
+- Delhi live weather integration
+- Weather refresh and status indicators
 
 ## Limitations
 
