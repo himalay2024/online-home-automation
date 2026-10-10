@@ -82,6 +82,15 @@ public class DeviceListServlet extends HttpServlet {
             return;
         }
 
+        int totalDevices = devices.size();
+        int devicesOn = 0;
+        for (Device device : devices) {
+            if (device.isStatus()) {
+                devicesOn++;
+            }
+        }
+        int devicesOff = totalDevices - devicesOn;
+
         response.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = response.getWriter();
@@ -198,6 +207,15 @@ public class DeviceListServlet extends HttpServlet {
         out.println("}");
 
         // Device grid
+        out.println(".stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin: 24px 0; }");
+                out.println(".weather-card { background: linear-gradient(135deg, #eff6ff, #ffffff); }");
+        out.println(".weather-card small { display: block; margin-top: 12px; color: #64748b; }");
+        out.println(".status { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 20px; font-size: 13px; font-weight: 700; margin: 12px 0; }");
+        out.println(".status-on { color: #166534; background: #dcfce7; border: 1px solid #86efac; }");
+        out.println(".status-off { color: #991b1b; background: #fee2e2; border: 1px solid #fca5a5; }");
+out.println(".stat-card { background: #ffffff; border-radius: 14px; padding: 22px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); border: 1px solid #e5e7eb; }");
+        out.println(".stat-card h3 { margin: 0 0 10px; font-size: 15px; color: #555; }");
+        out.println(".stat-card p { margin: 0; font-size: 30px; font-weight: bold; color: #2563eb; }");
         out.println(".device-grid {");
         out.println("display: grid;");
         out.println("grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));");
@@ -419,7 +437,17 @@ public class DeviceListServlet extends HttpServlet {
         } else {
 
             // Create a responsive grid for all available devices
-            out.println("<div class='device-grid'>");
+            out.println("<div class='stats-grid'>");
+            out.println("<div class='stat-card'><h3>Total Devices</h3><p>" + totalDevices + "</p></div>");
+            out.println("<div class='stat-card'><h3>Devices ON</h3><p>" + devicesOn + "</p></div>");
+            out.println("<div class='stat-card'><h3>Devices OFF</h3><p>" + devicesOff + "</p></div>");
+            out.println("</div>");
+            out.println("<div class='stat-card weather-card'><h3>🌦️ Delhi Live Weather</h3><div id='weatherIcon' style='font-size:36px;margin:10px 0'>🌤️</div><p id='delhiTemp'>Loading...</p><div id='delhiHumidity'>Humidity: Loading...</div><small id='weatherUpdated'>Fetching current weather...</small></div>");
+        out.println("<script>");
+        out.println("async function loadDelhiWeather(){try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FKolkata');if(!r.ok)throw new Error('Weather request failed');const d=await r.json();const c=d.current.weather_code;const icon=c===0?'☀️':([1,2,3].includes(c)?'🌤️':([45,48].includes(c)?'🌫️':([51,53,55,61,63,65,80,81,82].includes(c)?'🌧️':([71,73,75,85,86].includes(c)?'❄️':'⛈️'))));document.getElementById('weatherIcon').textContent=icon;document.getElementById('delhiTemp').textContent=d.current.temperature_2m+' °C';document.getElementById('delhiHumidity').textContent='Humidity: '+d.current.relative_humidity_2m+'%';document.getElementById('weatherUpdated').textContent='Updated: '+d.current.time.replace('T',' ');}catch(e){document.getElementById('delhiTemp').textContent='Unavailable';document.getElementById('delhiHumidity').textContent='Weather data could not be loaded';document.getElementById('weatherUpdated').textContent='Please refresh later';}}");
+        out.println("loadDelhiWeather();setInterval(loadDelhiWeather,300000);");
+        out.println("</script>");
+        out.println("<div class='device-grid'>");
 
             // Iterate through the device collection
             for (Device device : devices) {
